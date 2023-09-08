@@ -10,13 +10,9 @@ module clipboard {
     x? : string     # 输入到剪贴板的内容
   ] {
     if ($in | is-empty) {
-      if ($x | is-empty) {
-        get
-      } else {
-        set $x
-      }
+      if ($x | is-empty) { get } else { set $x }
     } else {
-      set ($in | into string)
+      set $in
     }
   }
 
@@ -25,34 +21,41 @@ module clipboard {
   }
 
   def set [x : string] {
-    powershell -c $'Set-Clipboard "($x)"'
+    print 'set clip'
+    | powershell -c $'Set-Clipboard "($in)"'
   }
+}
+
+use clipboard clip
+
+def 'clip sl' [] {
+  clip
+  | str replace (char crlf) (char lf) -a
+  | str replace $'-(char lf)' '' -a
+  | str replace (char lf) ' ' -a
+  | str trim | clip
 }
 
 def empty-default [default] {
   if ($in | is-empty) { $default } else { $in }
 }
 
-$env.cdu = [ 
-  [ Home, '~' ],
-  [ Self, '~/Self' ],
-  [ Project, '~/Self/Project' ],
-  [ Blog, '~/Self/Project/Blog/git-blog' ],
-]
+$env.cdu = { 
+  Home: '~',
+  Self: '~\Self',
+  Project: '~\Self\Project',
+  Blog: '~\Self\Project\Blog\git-blog',
+  Config: '~\Self\Project\Git\Self\config',
+  Git: '~\Self\Project\Git',
+}
   
 module cdu {
 
-  def map-col [] {
-    $env.cdu | each { |x| $x | get 0 }
-  }
-
   def map-get [key] {
-    $env.cdu | filter { |x|
-      ($x | get 0) == $key
-    } | if ($in | is-empty) {
+    try {
+      $env.cdu | get $key
+    } catch {
       $key
-    } else {
-      $in | get 0 | get 1
     }
   }
 
@@ -73,19 +76,15 @@ module cdu {
     $input | str trim -l | split row -r '\s+' | skip 1
   }
 
-  def ls-f [path: string, p: string] {
-    ls-dn $path | filter { |x| $x | str starts-with $p }
-  }
-
   def helper [input] {
     let parts = parse-input $input
     match $parts {
-      [] => map-col
-      [ '' ] => map-col
+      [] | [ '' ] => { $env.cdu | columns }
       [ '.' ] => { ls-dn '.' }
       [ $h ] => {
-        map-col | append (ls-dn '.')
+        $env.cdu | columns | append (ls-dn '.')
         | filter { |x| $x | str starts-with -i $h }
+        | uniq
       }
       _ => {
         ls-dn (part-join ($parts | drop 1))
@@ -98,11 +97,13 @@ module cdu {
   }
 
   export def-env cdt [...parts: string@helper] {
-    $parts | part-join $in | cd $in
+    match $parts {
+      [] => [ Self ]
+      _ => $parts
+    } | part-join $in | cd $in
   }
 
 }
 
-use clipboard clip
 use cdu [ cdt, cdi ]
 
