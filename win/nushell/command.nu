@@ -21,8 +21,7 @@ module clipboard {
   }
 
   def set [x : string] {
-    print 'set clip'
-    | powershell -c $'Set-Clipboard "($in)"'
+     powershell -c $'Set-Clipboard "($x | into string)"'
   }
 }
 
@@ -32,7 +31,8 @@ def 'clip sl' [] {
   clip
   | str replace (char crlf) (char lf) -a
   | str replace $'-(char lf)' '' -a
-  | str replace (char lf) ' ' -a
+  | str replace "\n" " " -a
+  | str replace '"' '`"' -a
   | str trim | clip
 }
 
@@ -40,7 +40,7 @@ def empty-default [default] {
   if ($in | is-empty) { $default } else { $in }
 }
 
-$env.cdu = { 
+$env.path-alias = { 
   Home: '~',
   Self: '~\Self',
   Project: '~\Self\Project',
@@ -53,7 +53,7 @@ module cdu {
 
   def map-get [key] {
     try {
-      $env.cdu | get $key
+      $env.path-alias | get $key
     } catch {
       $key
     }
@@ -69,7 +69,7 @@ module cdu {
   }
 
   def ls-dn [path] {
-    ls $path | where type == dir | get name | path basename
+    ls $path -s | where type == dir | get name
   }
 
   def parse-input [input] {
@@ -79,10 +79,10 @@ module cdu {
   def helper [input] {
     let parts = parse-input $input
     match $parts {
-      [] | [ '' ] => { $env.cdu | columns }
+      [] | [ '' ] => { $env.path-alias | columns }
       [ '.' ] => { ls-dn '.' }
       [ $h ] => {
-        $env.cdu | columns | append (ls-dn '.')
+        $env.path-alias | columns | append (ls-dn '.')
         | filter { |x| $x | str starts-with -i $h }
         | uniq
       }
@@ -105,5 +105,5 @@ module cdu {
 
 }
 
-use cdu [ cdt, cdi ]
+use cdu [ cdt ]
 
