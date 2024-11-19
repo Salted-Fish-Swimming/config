@@ -17,11 +17,15 @@ module clipboard {
   }
 
   def get [] {
-    powershell -c 'Get-Clipboard' | decode utf-8
+    win32yank -o
+    # 旧版本
+    # powershell -c 'Get-Clipboard' | decode utf-8
   }
 
   def set [x : string] {
-     powershell -c $'Set-Clipboard "($x | into string)"'
+    echo $x | win32yank -i
+    # 旧版本
+    # powershell -c $'Set-Clipboard "($x | into string)"'
   }
 }
 

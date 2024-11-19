@@ -1,12 +1,8 @@
 local wezterm = require 'wezterm'
 
--- wezterm.on('window-config-reloaded', function(window, pane)
---   window:set_position(962, 38)
--- end)
-
 return {
   -- 字体
-  font_size = 10,
+  font_size = 12,
   font = wezterm.font_with_fallback({ 'VictorMono NF', '更纱黑体 Mono SC Nerd' }),
   font_rules = {
     { intensity = 'Normal', italic = false,
@@ -40,25 +36,33 @@ return {
   window_background_opacity = 0.83,
   text_background_opacity = 0.5,
   -- 窗口初始化大小
-  initial_cols = 104,
-  initial_rows = 46,
+  initial_cols = 85,
+  initial_rows = 37,
   -- 内边距
   window_padding = {
-    left = 7, right = 7,
-    top = 11, bottom = 9,
+    left = 8, right = 8,
+    top = 9, bottom = 4,
   },
   -- 关闭 tab 栏
-  enable_tab_bar = false,
+  enable_tab_bar = true,
+  window_decorations = "INTEGRATED_BUTTONS|RESIZE",
+  --
   -- 启动参数
   default_gui_startup_args = {
-    -- 设置窗口位置
-    'start', '--position', 'main:957,3'
+    -- 设置起始时窗口位置
+    'start', '--position', 'main:955,3'
   },
   -- 指定启动 shell
-  default_prog = {
-    'C:\\ProgramData\\chocolatey\\bin\\nu.exe -i',
-    -- 'C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
-    -- '-NoExit',
-    -- '-Command', -- 'Start-Sleep -s 0.3 ; nu'
+  set_environment_variables = {
+    COMSPEC =
+      "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
   },
+  -- 指定默认路径为当前窗口路径
+  default_cwd = wezterm.home_dir,
+  -- default_prog = {
+  --   -- 'C:\\ProgramData\\chocolatey\\bin\\nu.exe -i',
+  --   'C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
+  --   -- '-NoExit',
+  --   -- '-Command', -- 'Start-Sleep -s 0.3 ; nu'
+  -- },
 }
