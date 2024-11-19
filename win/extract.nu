@@ -16,7 +16,9 @@ def 'extract nu' [] {
   }
   let dst_path = './nushell'
   for $src_path in $src_paths {
-    cp -r $scr_path $dst_path
+    cp -r $src_path $dst_path
   }
 }
 
+extract helix
+extract nu

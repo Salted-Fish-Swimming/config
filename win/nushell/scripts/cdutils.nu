@@ -17,9 +17,10 @@ def empty-default [value] {
 
 def part-join [parts] {
   match $parts {
-    [] => '.'
+    []          => '.'
     [$h, ..$rp] => {
-      map-get $h | append $rp | path join
+      map-get $h | append $rp
+      | path join | path expand
     }
   }
 }
@@ -35,25 +36,25 @@ def parse-input [input] {
 def helper [input] {
   match (parse-input $input) {
     [] | [ '' ] => { $env.cdu.path-alias | columns }
-    [ '.' ] => { ls-dn '.' }
-    [ $h ] => {
+    [ '.' ]     => { ls-dn '.' }
+    [ $h ]      => {
       $env.cdu.path-alias | columns | append (ls-dn '.')
       | uniq
     }
-    $parts => {
-      ls-dn (part-join ($parts | drop 1) | path expand)
+    $parts      => {
+      ls-dn (part-join ($parts | drop 1))
     }
   }
 }
 
 export def --env cdi [path: string] {
-  $in | empty-default $path | empty-default '~' | cd $in
+  $in | empty-default $path | empty-default '~/Self' | cd $in
 }
 
 export def --env cdt [...parts: string@helper] {
   match $parts {
     [] => [ Self ]
-    _ => $parts
+    _  => $parts
   } | part-join $in | cd $in
 }
 
