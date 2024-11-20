@@ -26,7 +26,7 @@ def part-join [parts] {
 }
 
 def ls-dn [path] {
-  ls $path -s | where type == dir | get name
+  ls $path -as | where type == dir | get name
 }
 
 def parse-input [input] {
