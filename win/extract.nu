@@ -1,5 +1,5 @@
 
-def 'extract helix' [] {
+def 'extract wezterm' [] {
   let src_path = ([
     $nu.home-path, '.config/wezterm', 'wezterm.lua'
   ] | path join)
@@ -20,5 +20,12 @@ def 'extract nu' [] {
   }
 }
 
-extract helix
+def 'extract helix' [] {
+  let src_path = 'C:/Users/31090/AppData/Roaming/helix'
+  let dst_path = './helix'
+  cp -r $src_path $dst_path
+}
+
+extract wezterm
 extract nu
+extract helix
