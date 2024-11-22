@@ -17,50 +17,50 @@ $env.cdu = {
 }
 
 
-def match-prefix [dir, map] {
-    def match-relative [dir, key] {
-        let full_path = $map | get $key
-        match (do -s { $dir | path relative-to $full_path }) {
-            null           => null
-            ''             => [ $key, '' ]
-            $relative_path => [ $key, $relative_path ]
+def create_left_prompt [] {
+    def match-prefix [dir, map] {
+        def match-relative [dir, key] {
+            let full_path = $map | get $key
+            match (do -s { $dir | path relative-to $full_path }) {
+                null           => null
+                ''             => [ $key, '' ]
+                $relative_path => [ $key, $relative_path ]
+            }
         }
+        def match-left [dir, cols] {
+            match $cols {
+                [] => null
+                [ $key ] => { match-relative $dir $key }
+                [ $key, ..$rest ] => {
+                    let term = match-left $dir $rest
+                    if $term == null {
+                        match-relative $dir $key
+                    } else {
+                        $term
+                    }
+                }
+            }
+        }
+        match-left $dir ($map | columns)
     }
-    def match-left [dir, cols] {
-        match $cols {
+
+    def match-prompt [dir, maps] {
+        match $maps {
             [] => null
-            [ $key ] => { match-relative $dir $key }
-            [ $key, ..$rest ] => {
-                let term = match-left $dir $rest
+            [ $map ] => {
+                match-prefix $dir $map
+            }
+            [ $map, ..$rest ] => {
+                let term = match-prompt $dir $rest
                 if $term == null {
-                    match-relative $dir $key
+                    match-prefix $dir $map
                 } else {
                     $term
                 }
             }
         }
     }
-    match-left $dir ($map | columns)
-}
 
-def match-prompt [dir, maps] {
-    match $maps {
-        [] => null
-        [ $map ] => {
-            match-prefix $dir $map
-        }
-        [ $map, ..$rest ] => {
-            let term = match-prompt $dir $rest
-            if $term == null {
-                match-prefix $dir $map
-            } else {
-                $term
-            }
-        }
-    }
-}
-
-def create_left_prompt [] {
     let path_color = (if (is-admin) { ansi red_bold } else { ansi green_bold })
     let separator_color = (if (is-admin) { ansi light_red_bold } else { ansi light_green_bold })
     let path_segment = do {

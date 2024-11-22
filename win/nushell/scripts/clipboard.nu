@@ -11,9 +11,7 @@ def set [x : string] {
   # powershell -c $'Set-Clipboard "($x | into string)"'
 }
 
-# 通过 powrshell 与剪贴板进行交互的命令
-# 如果有输入或参数则向剪贴板内写入内容
-# 不带输入参数输出剪贴板内容
+# 如果有输入或参数则向剪贴板内写入内容, 不带输入参数输出剪贴板内容
 export def clip [
   x? : string     # 输入到剪贴板的内容
 ] {
@@ -24,7 +22,7 @@ export def clip [
   }
 }
 
-def 'clip sl' [] {
+export def 'clip sl' [] {
   clip
   | str replace (char crlf) (char lf) -a
   | str replace $'-(char lf)' '' -a
