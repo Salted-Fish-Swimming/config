@@ -21,7 +21,7 @@ def 'extract nu' [] {
 }
 
 def 'extract helix' [] {
-  let src_path = 'C:/Users/31090/AppData/Roaming/helix'
+  let src_path = $env.APPDATA | path join 'helix'
   let dst_path = './helix'
   cp -r $src_path $dst_path
 }
