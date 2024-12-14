@@ -1,5 +1,6 @@
 [editor]
 default-line-ending = "lf"
+line-number = "relative"
 
 [editor.statusline]
 mode.normal = "Normal"
