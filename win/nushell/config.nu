@@ -901,3 +901,15 @@ $env.config = {
 use clipboard.nu *
 use cdutils.nu *
 
+def ub24 [...parts] {
+  let addr = 'zx@192.168.56.4'
+
+  if ($parts | is-empty) {
+    $addr
+  } else {
+    $addr + ":~" | path join ...$parts
+  }
+}
+
+alias vbm = `C:\Program Files\Oracle\VirtualBox\VBoxManage.exe`
+

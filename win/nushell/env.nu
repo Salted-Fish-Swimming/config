@@ -2,20 +2,34 @@
 #
 # version = "0.100.0"
 
-$env.cdu = {
-    path-alias: {
-        Home: '~',
-        Self: '~/Self/',
-        Project: '~/Self/Project/',
-        Git: '~/Self/Project/Git/',
-        Blog: '~/Self/Project/Blog/git-blog/',
-    }
-    prefix-alias: {
-        Haskell: '~/Self/Project/Program-Language/Haskell/'
-        Config: '~/Self/Project/Git/Self/config/'
+$env.cdu = do {
+    let Home = '~'
+    let Self = $Home | path join Self
+    let Proj = $Self | path join Project
+    let Git = $Proj | path join Git
+    let PLP = $Proj | path join Program-Language
+    let FrontEnd = $PLP | path join JavaScript Web Front-End
+    return {
+        default: Self
+        path-alias: {
+            Home: $Home, Self: $Self,
+            Project: $Proj, Git: $Git,
+            Blog: ($Git | path join git-blog)
+            'Program-Language': $PLP
+        }
+        prefix-alias: {
+            'Git\Config': ($Git | path join config)
+            'PL\Haskell': ($PLP | path join Haskell)
+            'PL\C': ($PLP | path join C) 
+            'PL\JS': ($PLP | path join JavaScript) 
+            'Web\Front-End': $FrontEnd
+            'Vue\2': ($FrontEnd | path join Vue 2)
+            'Vue\3': ($FrontEnd | path join Vue 3)
+            'Web\Back-End': ($PLP | path join JavaScript Web Back-End)
+            'Web\Full-Stack': ($PLP | path join JavaScript Web Full-Stack)
+        }
     }
 }
-
 
 def create_left_prompt [] {
     def match-prefix [dir, map] {
@@ -74,14 +88,13 @@ def create_left_prompt [] {
             [ $prefix, $subpath ] => {
                 [
                     $"(ansi light_yellow_bold)($prefix):",
-                    $"($path_color)($subpath)(ansi reset)"
-                ] | path join
+                    ($"($path_color)($subpath)(ansi reset)" | str replace --all (char path_sep) $"($separator_color)(char path_sep)($path_color)")
+                ] | str join
             }
         }
     }
 
     $path_segment
-    | str replace --all (char path_sep) $"($separator_color)(char path_sep)($path_color)"
 }
 
 def create_right_prompt [] {

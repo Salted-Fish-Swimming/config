@@ -1,7 +1,7 @@
 
 def map-get [key] {
   try {
-    $env.cdu.path-alias | get $key
+    $env.cdu.path-alias | merge $env.cdu.prefix-alias | get $key
   } catch {
     $key
   }
@@ -47,13 +47,13 @@ def helper [input] {
   }
 }
 
-export def --env cdi [path: string] {
+export def --env cdi [path?: string] {
   $in | empty-default $path | empty-default '~/Self' | cd $in
 }
 
 export def --env cdt [...parts: string@helper] {
   match $parts {
-    [] => [ Self ]
+    [] => [ $env.cdu.default ]
     _  => $parts
   } | part-join $in | cd $in
 }
