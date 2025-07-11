@@ -53,16 +53,16 @@ return {
     'start', '--position', 'main:955,3'
   },
   -- 指定默认路径为当前窗口路径
-  default_cwd = wezterm.home_dir,
+  -- default_cwd = wezterm.home_dir,
   -- 指定启动 shell
-  set_environment_variables = {
-    COMSPEC =
-      "C:\\Users\\31090\\AppData\\Local\\Programs\\nu\\bin\\nu.exe",
-  },
-  -- default_prog = {
-  --   -- 'C:\\ProgramData\\chocolatey\\bin\\nu.exe -i',
-  --   'C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
-  --   -- '-NoExit',
-  --   -- '-Command', -- 'Start-Sleep -s 0.3 ; nu'
+  -- set_environment_variables = {
+  --   COMSPEC =
+  --     "C:\\Users\\31090\\AppData\\Local\\Programs\\nu\\bin\\nu.exe",
   -- },
+  default_prog = {
+    -- 'C:\\ProgramData\\chocolatey\\bin\\nu.exe', '-i',
+    'C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
+    -- '-NoExit',
+    '-Command', 'nu'
+  },
 }

@@ -38,7 +38,9 @@ def helper [input] {
     [] | [ '' ] => { $env.cdu.path-alias | columns }
     [ '.' ]     => { ls-dn '.' }
     [ $h ]      => {
-      $env.cdu.path-alias | columns | append (ls-dn '.')
+      ls-dn '.'
+      | append ($env.cdu.path-alias | columns)
+      | append ($env.cdu.prefix-alias | columns)
       | uniq
     }
     $parts      => {

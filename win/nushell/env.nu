@@ -18,7 +18,8 @@ $env.cdu = do {
             'Program-Language': $PLP
         }
         prefix-alias: {
-            'Git\Config': ($Git | path join config)
+            'Nu\Config': ($nu.default-config-dir)
+            'Git\Config': ($Git | path join Self config)
             'PL\Haskell': ($PLP | path join Haskell)
             'PL\C': ($PLP | path join C) 
             'PL\JS': ($PLP | path join JavaScript) 
