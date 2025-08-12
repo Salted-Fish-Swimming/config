@@ -14,7 +14,7 @@ $env.cdu = do {
         path-alias: {
             Home: $Home, Self: $Self,
             Project: $Proj, Git: $Git,
-            Blog: ($Git | path join git-blog)
+            Blog: 'C:\Users\31090\Self\Project\Blog\git-blog'
             'Program-Language': $PLP
         }
         prefix-alias: {
@@ -28,6 +28,7 @@ $env.cdu = do {
             'Vue\3': ($FrontEnd | path join Vue 3)
             'Web\Back-End': ($PLP | path join JavaScript Web Back-End)
             'Web\Full-Stack': ($PLP | path join JavaScript Web Full-Stack)
+            'ManFei': ($Self | path join Work ManFei)
         }
     }
 }

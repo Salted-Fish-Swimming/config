@@ -1,0 +1,28 @@
+[editor]
+default-line-ending = "lf"
+line-number = "relative"
+
+[editor.statusline]
+mode.normal = "Normal"
+mode.insert = "Insert"
+mode.select = "Select"
+
+[editor.cursor-shape]
+normal = "block"
+insert = "bar"
+select = "block"
+
+[keys.normal]
+"C-[" = "normal_mode"
+
+[keys.select]
+"C-[" = [ "normal_mode", "collapse_selection" ]
+
+[keys.insert]
+"C-[" = "normal_mode"
+
+"A-h" = "move_char_left"
+"A-j" = "move_visual_line_down"
+"A-k" = "move_visual_line_up"
+"A-l" = "move_char_right"
+

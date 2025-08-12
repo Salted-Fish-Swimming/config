@@ -1,35 +1,37 @@
 local wezterm = require 'wezterm'
 
+local font_rule_1 = {
+  { intensity = 'Normal', italic = false,
+    font = wezterm.font_with_fallback({
+      { family = 'VictorMono NF', weight = 'Medium', },
+      { family = '更纱黑体 Mono SC Nerd', weight = 'Medium', }, }), },
+  { intensity = 'Half', italic = false,
+    font = wezterm.font_with_fallback({
+      { family = 'VictorMono NF', weight = 'DemiBold', },
+      { family = '更纱黑体 Mono SC Nerd', weight = 'DemiBold', }, }), },
+  { intensity = 'Bold', italic = false,
+    font = wezterm.font_with_fallback({
+      { family = 'VictorMono NF', weight = 'Bold', },
+      { family = '更纱黑体 Mono SC Nerd', weight = 'Bold', }, }), },
+  { intensity = 'Normal', italic = true,
+    font = wezterm.font_with_fallback({
+      { family = 'VictorMono NF', weight = 'Medium', style = 'Oblique', },
+      { family = '更纱黑体 Mono SC Nerd', weight = 'Medium', style = 'Italic', }, }), },
+  { intensity = 'Half', italic = true,
+    font = wezterm.font_with_fallback({
+      { family = 'VictorMono NF', weight = 'DemiBold', style = 'Oblique', },
+      { family = '更纱黑体 Mono SC Nerd', weight = 'DemiBold', style = 'Italic', }, }), },
+  { intensity = 'Bold', italic = true,
+    font = wezterm.font_with_fallback({
+      { family = 'VictorMono NF', weight = 'Bold', style = 'Oblique', },
+      { family = '更纱黑体 Mono SC Nerd', weight = 'Bold', style = 'Italic', }, }), },
+}
+
 return {
   -- 字体
   font_size = 12,
   font = wezterm.font_with_fallback({ 'VictorMono NF', '更纱黑体 Mono SC Nerd' }),
-  font_rules = {
-    { intensity = 'Normal', italic = false,
-      font = wezterm.font_with_fallback({
-        { family = 'VictorMono NF', weight = 'Medium', },
-        { family = '更纱黑体 Mono SC Nerd', weight = 'Medium', }, }), },
-    { intensity = 'Half', italic = false,
-      font = wezterm.font_with_fallback({
-        { family = 'VictorMono NF', weight = 'DemiBold', },
-        { family = '更纱黑体 Mono SC Nerd', weight = 'DemiBold', }, }), },
-    { intensity = 'Bold', italic = false,
-      font = wezterm.font_with_fallback({
-        { family = 'VictorMono NF', weight = 'Bold', },
-        { family = '更纱黑体 Mono SC Nerd', weight = 'Bold', }, }), },
-    { intensity = 'Normal', italic = true,
-      font = wezterm.font_with_fallback({
-        { family = 'VictorMono NF', weight = 'Medium', style = 'Oblique', },
-        { family = '更纱黑体 Mono SC Nerd', weight = 'Medium', style = 'Italic', }, }), },
-    { intensity = 'Half', italic = true,
-      font = wezterm.font_with_fallback({
-        { family = 'VictorMono NF', weight = 'DemiBold', style = 'Oblique', },
-        { family = '更纱黑体 Mono SC Nerd', weight = 'DemiBold', style = 'Italic', }, }), },
-    { intensity = 'Bold', italic = true,
-      font = wezterm.font_with_fallback({
-        { family = 'VictorMono NF', weight = 'Bold', style = 'Oblique', },
-        { family = '更纱黑体 Mono SC Nerd', weight = 'Bold', style = 'Italic', }, }), },
-  },
+  font_rules = font_rule_1,
   -- 颜色主题
   -- color_scheme = 'Batman',
   -- 背景透明
@@ -50,7 +52,9 @@ return {
   -- 启动参数
   default_gui_startup_args = {
     -- 设置起始时窗口位置
-    'start', '--position', 'main:955,3'
+    'start',
+    '--position', 'main:955,3',
+    '--cwd', 'C:/Users/31090/Self',
   },
   -- 指定默认路径为当前窗口路径
   -- default_cwd = wezterm.home_dir,
@@ -61,7 +65,7 @@ return {
   -- },
   default_prog = {
     -- 'C:\\ProgramData\\chocolatey\\bin\\nu.exe', '-i',
-    'C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
+    'C:/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe',
     -- '-NoExit',
     '-Command', 'nu'
   },
