@@ -8,7 +8,7 @@ def safety-cp-dir [src, dst] {
 }
 
 def extract [src, dst, filetree] {
-  mkdir -v $dst
+  mkdir $dst
   match $filetree {
     { type: 'file', name: $name } => {
       safety-cp-file ($src | path join $name) ($dst | path join $name)
