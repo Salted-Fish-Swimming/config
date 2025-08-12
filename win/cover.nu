@@ -17,7 +17,7 @@ def cover [src, dst, filetree] {
       let src_path = ($src | path join $name)
       let dst_path = ($src | path join $name)
       for $file in $files {
-        extract $src_path $dst_path $file
+        cover $src_path $dst_path $file
       }
     }
     { type: 'dir-rec', name: $name } => {
@@ -29,7 +29,7 @@ def cover [src, dst, filetree] {
 def cover-wezterm [] {
   let src_path = './wezterm'
   let dst_path = ($nu.home-path | path join '.config' 'wezterm')
-  extract $src_path $dst_path {
+  cover $src_path $dst_path {
     type: 'file', name: 'wezterm.lua'
   }
 }
@@ -37,13 +37,13 @@ def cover-wezterm [] {
 def cover-nu [] {
   let src_path = './nushell'
   let dst_path = $nu.default-config-dir
-  extract $src_path $dst_path {
+  cover $src_path $dst_path {
     type: 'file', name: 'env.nu'
   }
-  extract $src_path $dst_path {
+  cover $src_path $dst_path {
     type: 'file', name: 'config.nu'
   }
-  extract $src_path $dst_path {
+  cover $src_path $dst_path {
     type: 'dir-rec', name: 'scripts'
   }
 }
@@ -51,7 +51,7 @@ def cover-nu [] {
 def cover-helix [] {
   let src_path = './helix'
   let dst_path = ($env.APPDATA | path join 'helix')
-  extract $src_path $dst_path {
+  cover $src_path $dst_path {
     type: file, name: 'config.toml'
   }
 }
