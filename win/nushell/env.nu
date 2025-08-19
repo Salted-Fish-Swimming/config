@@ -28,7 +28,6 @@ $env.cdu = do {
             'Vue\3': ($FrontEnd | path join Vue 3)
             'Web\Back-End': ($PLP | path join JavaScript Web Back-End)
             'Web\Full-Stack': ($PLP | path join JavaScript Web Full-Stack)
-            'ManFei': ($Self | path join Work ManFei)
         }
     }
 }

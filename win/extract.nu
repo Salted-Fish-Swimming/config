@@ -4,7 +4,7 @@ def safety-cp-file [src, dst] {
 }
 
 def safety-cp-dir [src, dst] {
-  cp -r $src $dst
+  cp -r $src ($dst | path join '..')
 }
 
 def extract [src, dst, filetree] {
