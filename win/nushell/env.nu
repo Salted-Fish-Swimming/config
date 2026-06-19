@@ -16,6 +16,7 @@ $env.cdu = do {
             Project: $Proj, Git: $Git,
             Blog: 'C:\Users\31090\Self\Project\Blog\git-blog'
             'Program-Language': $PLP
+            AppData: ($Home | path join AppData)
         }
         prefix-alias: {
             'Nu\Config': ($nu.default-config-dir)
@@ -36,7 +37,7 @@ def create_left_prompt [] {
     def match-prefix [dir, map] {
         def match-relative [dir, key] {
             let full_path = $map | get $key
-            match (do -s { $dir | path relative-to $full_path }) {
+            match (do -i { $dir | path relative-to $full_path }) {
                 null           => null
                 ''             => [ $key, '' ]
                 $relative_path => [ $key, $relative_path ]
@@ -167,6 +168,12 @@ $env.NU_LIB_DIRS = [
 $env.NU_PLUGIN_DIRS = [
     ($nu.default-config-dir | path join 'plugins') # add <nushell-config-dir>/plugins
 ]
+
+$env.HOMEPATH = (if $env.HOMEPATH == '\Users\31090\Self' {
+  '\Users\31090'
+} else {
+  $env.HOMEPATH
+})
 
 # To add entries to PATH (on Windows you might use Path), you can use the following pattern:
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
