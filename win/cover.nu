@@ -1,3 +1,14 @@
+def d-file [filename] {
+  return { type: 'file', name: $filename }
+}
+
+def d-dir [dirname, children] {
+  return { type: 'dir', name: $dirname, children: $children }
+}
+
+def d-dir-rec [dirname] {
+  return { type: 'dir-rec', name: $dirname }
+}
 
 def safety-cp-file [src, dst] {
   cp $src $dst
@@ -13,9 +24,9 @@ def cover [src, dst, filetree] {
     { type: 'file', name: $name } => {
       safety-cp-file ($src | path join $name) ($dst | path join $name)
     }
-    { type: 'dir', name: $name, files: $files } => {
+    { type: 'dir', name: $name, children: $files } => {
       let src_path = ($src | path join $name)
-      let dst_path = ($src | path join $name)
+      let dst_path = ($dst | path join $name)
       for $file in $files {
         cover $src_path $dst_path $file
       }
@@ -26,36 +37,31 @@ def cover [src, dst, filetree] {
   }
 }
 
-def cover-wezterm [] {
+export def wezterm [] {
   let src_path = './wezterm'
   let dst_path = ($nu.home-path | path join '.config' 'wezterm')
-  cover $src_path $dst_path {
-    type: 'file', name: 'wezterm.lua'
-  }
+  cover $src_path $dst_path (d-file 'wezterm.lua')
 }
 
-def cover-nu [] {
+export def nu [] {
   let src_path = './nushell'
   let dst_path = $nu.default-config-dir
-  cover $src_path $dst_path {
-    type: 'file', name: 'env.nu'
-  }
-  cover $src_path $dst_path {
-    type: 'file', name: 'config.nu'
-  }
-  cover $src_path $dst_path {
-    type: 'dir-rec', name: 'scripts'
-  }
+  cover $src_path $dst_path (d-dir '.' [
+    (d-file 'env.nu'),
+    (d-file 'config.nu'),
+    (d-dir-rec 'scripts'),
+  ])
 }
 
-def cover-helix [] {
+export def helix [] {
   let src_path = './helix'
   let dst_path = ($env.APPDATA | path join 'helix')
-  cover $src_path $dst_path {
-    type: file, name: 'config.toml'
-  }
+  cover $src_path $dst_path (d-file 'config.toml')
 }
 
-cover-wezterm
-cover-nu
-cover-helix
+export def all [] {
+  wezterm
+  nu
+  helix
+}
+

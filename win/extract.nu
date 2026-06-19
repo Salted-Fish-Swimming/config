@@ -26,7 +26,7 @@ def extract [src, dst, filetree] {
     }
     { type: 'dir', name: $name, children: $files } => {
       let src_path = ($src | path join $name)
-      let dst_path = ($src | path join $name)
+      let dst_path = ($dst | path join $name)
       for $file in $files {
         extract $src_path $dst_path $file
       }
@@ -37,15 +37,17 @@ def extract [src, dst, filetree] {
   }
 }
 
-def extract-wezterm [] {
+const current_dir = (path self .)
+
+export def wezterm [] {
   let src_path = ($nu.home-path | path join '.config' 'wezterm')
-  let dst_path = './wezterm'
+  let dst_path = ($current_dir | path join './wezterm')
   extract $src_path $dst_path (d-file 'wezterm.lua')
 }
 
-def extract-nu [] {
+export def nu [] {
   let src_path = $nu.default-config-dir
-  let dst_path = './nushell'
+  let dst_path = ($current_dir | path join './nushell')
   extract $src_path $dst_path (d-dir '.' [
     (d-file 'env.nu'),
     (d-file 'config.nu'),
@@ -53,12 +55,15 @@ def extract-nu [] {
   ])
 }
 
-def extract-helix [] {
+export def helix [] {
   let src_path = ($env.APPDATA | path join 'helix')
-  let dst_path = './helix'
+  let dst_path = ($current_dir | path join './helix')
   extract $src_path $dst_path (d-file 'config.toml')
 }
 
-extract-wezterm
-extract-nu
-extract-helix
+export def all [] {
+  wezterm
+  nu
+  helix
+}
+
