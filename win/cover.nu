@@ -39,7 +39,7 @@ def cover [src, dst, filetree] {
 
 export def wezterm [] {
   let src_path = './wezterm'
-  let dst_path = ($nu.home-path | path join '.config' 'wezterm')
+  let dst_path = ($nu.home-dir | path join '.config' 'wezterm')
   cover $src_path $dst_path (d-file 'wezterm.lua')
 }
 

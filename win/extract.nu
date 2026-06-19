@@ -40,7 +40,7 @@ def extract [src, dst, filetree] {
 const current_dir = (path self .)
 
 export def wezterm [] {
-  let src_path = ($nu.home-path | path join '.config' 'wezterm')
+  let src_path = ($nu.home-dir | path join '.config' 'wezterm')
   let dst_path = ($current_dir | path join './wezterm')
   extract $src_path $dst_path (d-file 'wezterm.lua')
 }
